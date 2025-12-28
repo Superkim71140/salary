@@ -113,13 +113,15 @@
 
         input[type="number"] {
             width: 100px;
-            padding: 10px; /* เพิ่ม padding ให้กดง่ายขึ้น */
+            padding: 10px; 
             border: 1px solid #dfe6e9;
             border-radius: 8px;
             text-align: right;
             font-family: 'Prompt';
             font-size: 14px;
             transition: 0.3s;
+            /* แก้ไข: เพิ่ม box-sizing เพื่อให้ Padding ไม่ไปเพิ่มขนาดความกว้างจริง */
+            box-sizing: border-box; 
         }
         input[type="number"]:focus {
             border-color: var(--primary);
@@ -299,25 +301,26 @@
         /* ---- MOBILE OPTIMIZATION ---- */
         @media (max-width: 480px) {
             body {
-                padding: 10px 5px; /* ลด padding ด้านข้าง */
+                padding: 10px 5px; 
             }
 
             .container {
-                padding: 20px 15px; /* ลดพื้นที่ในกล่องลงเพื่อให้เนื้อหากว้างขึ้น */
+                padding: 20px 15px;
                 border-radius: 20px;
-                margin-bottom: 80px; /* เพิ่มพื้นที่ด้านล่างเผื่อสำหรับปุ่ม Home */
+                margin-bottom: 80px; 
             }
 
             /* ปรับขนาดตัวอักษร input เป็น 16px เพื่อป้องกัน iOS Zoom */
             input[type="number"] {
                 font-size: 16px; 
-                width: 90px; /* ปรับความกว้างให้พอดีหน้าจอเล็ก */
+                padding: 5px; /* แก้ไข: ลด padding ลงนิดหน่อยในมือถือให้มีพื้นที่ */
             }
 
             /* ปรับ Grid ของ OT ให้ชิดกันมากขึ้นบนจอมือถือ */
             .ot-grid {
                 gap: 5px;
-                grid-template-columns: 1fr 60px 60px; /* บังคับขนาดคอลัมน์ input */
+                /* แก้ไข: เพิ่มขนาดคอลัมน์จาก 60px เป็น 70px เพื่อให้ไม่ซ้อน */
+                grid-template-columns: 1fr 70px 70px; 
             }
             .ot-inp {
                 width: 100% !important;
@@ -328,10 +331,9 @@
             }
 
             .btn {
-                padding: 14px; /* ปุ่มกดง่ายขึ้น */
+                padding: 14px; 
             }
 
-            /* Toast ลงมาอยู่ข้างล่างบนมือถือ จะได้ไม่บังปุ่มข้างบน */
             .toast {
                 top: auto;
                 bottom: 30px;
