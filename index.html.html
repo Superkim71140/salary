@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Salary Calculator Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --success: #00b894;
+            --danger: #ff7675;
+            --warning: #fdcb6e;
+            --dark: #2d3436;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --share-btn: #e17055;
+        }
+
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: var(--bg-gradient);
+            margin: 0;
+            padding: 20px 10px;
+            min-height: 100vh;
+            color: var(--dark);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* ปิดลูกศรตัวเลข */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: none;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            max-width: 450px;
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            backdrop-filter: blur(20px);
+            margin-bottom: 50px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header h2 {
+            margin: 0;
+            font-size: 20px;
+            color: var(--primary);
+        }
+        .icon-box {
+            background: #dfe6e9;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        /* Input Sections */
+        .card-section {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #edf2f7;
+        }
+
+        .section-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #636e72;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .input-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .input-row:last-child { margin-bottom: 0; }
+        .input-row label { font-size: 14px; color: #2d3436; }
+
+        input[type="number"] {
+            width: 100px;
+            padding: 8px;
+            border: 1px solid #dfe6e9;
+            border-radius: 8px;
+            text-align: right;
+            font-family: 'Prompt';
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        input[type="number"]:focus {
+            border-color: var(--primary);
+            outline: none;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+        }
+
+        /* OT Grid */
+        .ot-grid {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .ot-inp { width: 60px !important; }
+        .unit { font-size: 11px; color: #b2bec3; margin-left: -2px;}
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 22px;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(18px); }
+
+        /* Buttons Area */
+        .btn-wrapper {
+            margin-top: 20px;
+        }
+        .btn-top-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .btn {
+            border: none;
+            border-radius: 12px;
+            font-family: 'Prompt';
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: 0.2s;
+            padding: 12px;
+        }
+        .btn:active { transform: scale(0.96); }
+
+        .btn-save {
+            background-color: var(--success);
+            color: white;
+            flex: 1;
+        }
+        .btn-clear {
+            background-color: #ffeaa7;
+            color: #d63031;
+            flex: 1;
+        }
+        .btn-main {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+        }
+        .btn-share {
+            margin-top: 15px;
+            background: var(--share-btn);
+            color: white;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(225, 112, 85, 0.3);
+        }
+
+        /* Pay Slip Design */
+        .slip-modal {
+            display: none;
+            margin-top: 30px;
+            background: white;
+            border-radius: 0;
+            position: relative;
+            border-top: 5px solid var(--primary);
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            animation: slideUp 0.5s ease;
+        }
+        .slip-edge {
+            height: 10px;
+            background-image: radial-gradient(circle, transparent 50%, white 50%);
+            background-size: 10px 10px;
+            background-position: 0 100%;
+            margin-top: -5px;
+            position: relative;
+            z-index: 2;
+        }
+        .slip-content {
+            padding: 20px;
+            border-bottom: 2px dashed #dfe6e9;
+            background: white; /* ต้องใส่เพื่อให้เวลาแคปรูปพื้นหลังไม่ดำ */
+        }
+        .slip-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #636e72;
+        }
+        .slip-row.highlight { color: var(--dark); font-weight: 500; }
+        .slip-row.income { color: var(--success); }
+        .slip-row.deduct { color: var(--danger); }
+        
+        .net-amount {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 15px;
+        }
+        .net-amount span { font-size: 12px; opacity: 0.8; display: block;}
+        .net-amount h1 { margin: 0; font-size: 32px; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(45, 52, 54, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="icon-box"><i class="fas fa-wallet"></i></div>
+        <h2>คำนวณเงินเดือน</h2>
+        <div class="icon-box" style="opacity:0;"></div> 
+    </div>
+
+    <div class="card-section">
+        <div class="section-label"><i class="fas fa-money-bill-wave"></i> รายได้หลัก</div>
+        <div class="input-row">
+            <label>เงินเดือน</label>
+            <input type="number" id="baseSalary" value="12800">
+        </div>
+        <div class="input-row">
+            <label>ค่าที่พัก + น้ำมัน</label>
+            <input type="number" id="allowance" value="1500">
+        </div>
+    </div>
+
+    <div class="card-section">
+        <div class="section-label"><i class="fas fa-star"></i> เบี้ยขยัน (วันละ 125)</div>
+        <div class="input-row">
+            <label>จำนวนวันที่ได้</label>
+            <input type="number" id="diligenceDays" placeholder="0">
+        </div>
+    </div>
+
+    <div class="card-section">
+        <div class="section-label"><i class="fas fa-clock"></i> โอที (ชม. : นาที)</div>
+        
+        <div class="ot-grid">
+            <label>เรท 100</label>
+            <div><input type="number" class="ot-inp" id="ot100h" placeholder="ชม."></div>
+            <div><input type="number" class="ot-inp" id="ot100m" placeholder="น."></div>
+        </div>
+        <div class="ot-grid">
+            <label>เรท 120</label>
+            <div><input type="number" class="ot-inp" id="ot120h" placeholder="ชม."></div>
+            <div><input type="number" class="ot-inp" id="ot120m" placeholder="น."></div>
+        </div>
+        <div class="ot-grid">
+            <label>เรท 150</label>
+            <div><input type="number" class="ot-inp" id="ot150h" placeholder="ชม."></div>
+            <div><input type="number" class="ot-inp" id="ot150m" placeholder="น."></div>
+        </div>
+    </div>
+
+    <div class="card-section" style="border-left: 3px solid var(--danger);">
+        <div class="section-label" style="color: var(--danger);"><i class="fas fa-minus-circle"></i> รายการหัก</div>
+        <div class="input-row">
+            <label>หักประกันสังคม (5%)</label>
+            <label class="toggle-switch">
+                <input type="checkbox" id="ssoCheck" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="input-row" style="margin-top:10px;">
+            <label>หักอื่นๆ (สาย/ลา)</label>
+            <input type="number" id="otherDeduct" placeholder="0" style="color:var(--danger);">
+        </div>
+    </div>
+
+    <div class="btn-wrapper">
+        <div class="btn-top-row">
+            <button class="btn btn-save" onclick="manualSave()">
+                <i class="fas fa-save"></i> บันทึกค่า
+            </button>
+            <button class="btn btn-clear" onclick="clearData()">
+                <i class="fas fa-trash-alt"></i> ล้างค่า
+            </button>
+        </div>
+        <button class="btn btn-main" onclick="calculate()">
+            <i class="fas fa-calculator"></i> คำนวณ & สร้างสลิป
+        </button>
+    </div>
+
+    <div id="slipAreaWrapper" class="slip-modal">
+        <div id="slipCaptureTarget"> <div class="slip-content">
+                <div style="text-align:center; margin-bottom:15px; color:#b2bec3;">--- ใบสรุปเงินเดือน ---</div>
+                
+                <div class="slip-row highlight">
+                    <span>เงินเดือนพื้นฐาน</span>
+                    <span id="s_base">0.00</span>
+                </div>
+                <div class="slip-row">
+                    <span>ค่าที่พัก/น้ำมัน</span>
+                    <span id="s_allowance">0.00</span>
+                </div>
+                <div class="slip-row">
+                    <span>เบี้ยขยัน</span>
+                    <span id="s_diligence">0.00</span>
+                </div>
+                <div class="slip-row income">
+                    <span>รวมค่าโอที</span>
+                    <span id="s_ot">0.00</span>
+                </div>
+                
+                <div style="border-bottom: 1px solid #eee; margin: 10px 0;"></div>
+
+                <div class="slip-row deduct">
+                    <span>ประกันสังคม (SSO)</span>
+                    <span id="s_sso">-0.00</span>
+                </div>
+                <div class="slip-row deduct">
+                    <span>หักอื่นๆ</span>
+                    <span id="s_deduct">-0.00</span>
+                </div>
+
+                <div class="net-amount">
+                    <span>ยอดเงินสุทธิที่ได้รับ</span>
+                    <h1 id="s_net">0.00</h1>
+                    <span>บาท</span>
+                </div>
+            </div>
+            <div class="slip-edge"></div>
+        </div>
+
+        <div style="padding: 0 20px 20px 20px;">
+            <button class="btn btn-share" onclick="shareSlip()">
+                <i class="fas fa-share-alt"></i> บันทึกรูป / แชร์สลิป
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i> บันทึกข้อมูลเรียบร้อย</div>
+
+<script>
+    window.onload = loadData;
+
+    function getVal(id) {
+        return parseFloat(document.getElementById(id).value) || 0;
+    }
+
+    function calculate() {
+        // --- 1. รายรับ ---
+        const base = getVal('baseSalary');
+        const allowance = getVal('allowance');
+        const diligence = getVal('diligenceDays') * 125;
+
+        // คำนวณ OT
+        const ot100 = (getVal('ot100h') + (getVal('ot100m') / 60)) * 100;
+        const ot120 = (getVal('ot120h') + (getVal('ot120m') / 60)) * 120;
+        const ot150 = (getVal('ot150h') + (getVal('ot150m') / 60)) * 150;
+        const totalOT = ot100 + ot120 + ot150;
+
+        const totalIncome = base + allowance + diligence + totalOT;
+
+        // --- 2. รายจ่าย ---
+        let sso = 0;
+        if(document.getElementById('ssoCheck').checked) {
+            let calcBase = base > 15000 ? 15000 : base;
+            sso = calcBase * 0.05; 
+            if(sso > 750) sso = 750;
+        }
+
+        const otherDeduct = getVal('otherDeduct');
+        const totalDeduct = sso + otherDeduct;
+
+        // --- 3. สุทธิ ---
+        const net = totalIncome - totalDeduct;
+
+        // --- แสดงผล ---
+        const fmt = (num) => num.toLocaleString('th-TH', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+        document.getElementById('s_base').innerText = fmt(base);
+        document.getElementById('s_allowance').innerText = fmt(allowance);
+        document.getElementById('s_diligence').innerText = fmt(diligence);
+        document.getElementById('s_ot').innerText = fmt(totalOT);
+        
+        document.getElementById('s_sso').innerText = "-" + fmt(sso);
+        document.getElementById('s_deduct').innerText = "-" + fmt(otherDeduct);
+        
+        document.getElementById('s_net').innerText = fmt(net);
+
+        document.getElementById('slipAreaWrapper').style.display = 'block';
+        document.getElementById('slipAreaWrapper').scrollIntoView({behavior: 'smooth'});
+
+        // บันทึกเงียบๆ
+        saveData(false);
+    }
+
+    // --- ฟังก์ชันแชร์รูปภาพ ---
+    async function shareSlip() {
+        const target = document.getElementById('slipCaptureTarget');
+        
+        try {
+            // แปลง div เป็น canvas
+            const canvas = await html2canvas(target, {
+                scale: 2, // เพิ่มความคมชัด
+                backgroundColor: null
+            });
+            
+            const dataUrl = canvas.toDataURL("image/png");
+            
+            // แปลง DataURL เป็น Blob เพื่อใช้กับ Web Share API
+            const blob = await (await fetch(dataUrl)).blob();
+            const file = new File([blob], "mysalary_slip.png", { type: "image/png" });
+
+            // ตรวจสอบว่า Browser รองรับการแชร์ไฟล์ไหม (Mobile ส่วนใหญ่รองรับ)
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        files: [file],
+                        title: 'สลิปเงินเดือน',
+                        text: 'สรุปยอดเงินเดือนของฉัน'
+                    });
+                } catch (error) {
+                    console.log('Error sharing:', error);
+                    // ถ้าแชร์ไม่ได้ หรือกดยกเลิก ก็ให้ดาวน์โหลดแทน
+                    downloadImage(dataUrl);
+                }
+            } else {
+                // ถ้าเป็น PC ให้ดาวน์โหลดรูปเลย
+                downloadImage(dataUrl);
+            }
+        } catch (err) {
+            alert('เกิดข้อผิดพลาดในการสร้างรูปภาพ');
+            console.error(err);
+        }
+    }
+
+    function downloadImage(dataUrl) {
+        const link = document.createElement('a');
+        link.download = 'salary-slip.png';
+        link.href = dataUrl;
+        link.click();
+        showToast("บันทึกรูปภาพแล้ว");
+    }
+
+    function manualSave() {
+        saveData(true);
+    }
+
+    function saveData(showAlert = true) {
+        const data = {
+            base: document.getElementById('baseSalary').value,
+            allow: document.getElementById('allowance').value,
+            diligence: document.getElementById('diligenceDays').value,
+            ot100h: document.getElementById('ot100h').value,
+            ot100m: document.getElementById('ot100m').value,
+            ot120h: document.getElementById('ot120h').value,
+            ot120m: document.getElementById('ot120m').value,
+            ot150h: document.getElementById('ot150h').value,
+            ot150m: document.getElementById('ot150m').value,
+            sso: document.getElementById('ssoCheck').checked,
+            other: document.getElementById('otherDeduct').value
+        };
+        localStorage.setItem('salarySlipData', JSON.stringify(data));
+        
+        if(showAlert) {
+            showToast("บันทึกข้อมูลเรียบร้อย");
+        }
+    }
+
+    function loadData() {
+        const saved = localStorage.getItem('salarySlipData');
+        if (saved) {
+            const data = JSON.parse(saved);
+            document.getElementById('baseSalary').value = data.base;
+            document.getElementById('allowance').value = data.allow;
+            document.getElementById('diligenceDays').value = data.diligence;
+            document.getElementById('ot100h').value = data.ot100h;
+            document.getElementById('ot100m').value = data.ot100m;
+            document.getElementById('ot120h').value = data.ot120h;
+            document.getElementById('ot120m').value = data.ot120m;
+            document.getElementById('ot150h').value = data.ot150h;
+            document.getElementById('ot150m').value = data.ot150m;
+            document.getElementById('ssoCheck').checked = data.sso;
+            document.getElementById('otherDeduct').value = data.other;
+        }
+    }
+
+    function clearData() {
+        if(confirm('ต้องการล้างค่าที่กรอกใหม่ทั้งหมดหรือไม่?')) {
+            localStorage.removeItem('salarySlipData');
+            location.reload();
+        }
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        if(msg) t.innerHTML = `<i class="fas fa-check-circle"></i> ${msg}`;
+        t.style.opacity = '1';
+        setTimeout(() => {
+            t.style.opacity = '0';
+        }, 2000);
+    }
+</script>
+
+</body>
+</html>
