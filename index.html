@@ -5,339 +5,366 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Salary Calculator Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <style>
         :root {
             --primary: #6c5ce7;
+            --primary-dark: #5849be;
             --secondary: #a29bfe;
             --success: #00b894;
             --danger: #ff7675;
             --warning: #fdcb6e;
             --dark: #2d3436;
-            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --share-btn: #e17055;
+            --text-gray: #636e72;
+            --bg-gradient: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);
         }
 
         body {
             font-family: 'Prompt', sans-serif;
             background: var(--bg-gradient);
+            background-attachment: fixed; /* พื้นหลังนิ่งเวลาเลื่อน */
             margin: 0;
             padding: 20px 10px;
             min-height: 100vh;
-            /* เพิ่มเพื่อให้รองรับ browser มือถือแบบเต็มจอ */
             min-height: -webkit-fill-available;
             color: var(--dark);
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            /* ป้องกันการเด้งเวลากด keyboard */
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* ปิดลูกศรตัวเลข */
         input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type="number"] {
-            -moz-appearance: textfield;
-            appearance: none;
-        }
+        input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"] { -moz-appearance: textfield; appearance: none; }
 
         .container {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.92);
             width: 100%;
-            max-width: 450px;
-            border-radius: 24px;
-            padding: 25px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-            backdrop-filter: blur(20px);
-            margin-bottom: 50px;
-            /* Transition สำหรับการปรับขนาด */
-            transition: padding 0.3s ease;
+            max-width: 480px;
+            border-radius: 30px;
+            padding: 30px 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            margin-bottom: 40px;
         }
 
         /* Header */
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+            text-align: center;
+            margin-bottom: 25px;
         }
         .header h2 {
-            margin: 0;
-            font-size: 20px;
-            color: var(--primary);
+            margin: 10px 0 5px;
+            font-size: 24px;
+            color: var(--dark);
+            font-weight: 600;
         }
-        .icon-box {
-            background: #dfe6e9;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
+        .header p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+        .header-icon {
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            color: var(--primary);
+            font-size: 20px;
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.4);
         }
 
         /* Input Sections */
         .card-section {
-            background: #f8f9fa;
-            border-radius: 16px;
-            padding: 15px;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 20px;
             margin-bottom: 15px;
-            border: 1px solid #edf2f7;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid #f1f2f6;
+            transition: transform 0.2s;
         }
-
+        
         .section-label {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
-            color: #636e72;
-            margin-bottom: 10px;
+            color: var(--primary);
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
+        .input-group {
+            margin-bottom: 12px;
+        }
+        .input-group:last-child { margin-bottom: 0; }
+        
         .input-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
         }
-        .input-row:last-child { margin-bottom: 0; }
-        .input-row label { font-size: 14px; color: #2d3436; }
+        .input-row label { 
+            font-size: 15px; 
+            color: var(--dark);
+            font-weight: 500;
+        }
 
         input[type="number"] {
-            width: 100px;
-            padding: 10px; 
-            border: 1px solid #dfe6e9;
-            border-radius: 8px;
+            width: 110px;
+            padding: 12px; 
+            border: 2px solid #dfe6e9;
+            border-radius: 12px;
             text-align: right;
             font-family: 'Prompt';
-            font-size: 14px;
-            transition: 0.3s;
-            /* แก้ไข: เพิ่ม box-sizing เพื่อให้ Padding ไม่ไปเพิ่มขนาดความกว้างจริง */
+            font-size: 16px; /* สำคัญ: 16px ป้องกัน iOS ซูม */
+            font-weight: 500;
+            color: var(--dark);
+            background: #f9f9f9;
+            transition: all 0.3s ease;
             box-sizing: border-box; 
         }
         input[type="number"]:focus {
             border-color: var(--primary);
-            outline: none;
             background: #fff;
-            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
+            outline: none;
         }
 
-        /* OT Grid */
+        /* OT Grid Modern */
         .ot-grid {
             display: grid;
             grid-template-columns: 1fr auto auto;
-            gap: 8px;
+            gap: 10px;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #eee;
         }
-        .ot-inp { width: 60px !important; }
-        .unit { font-size: 11px; color: #b2bec3; margin-left: -2px;}
+        .ot-grid:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .ot-inp { width: 70px !important; text-align: center !important; }
 
-        /* Toggle Switch */
+        /* Toggle Switch Modern */
         .toggle-switch {
             position: relative;
             display: inline-block;
-            width: 40px;
-            height: 22px;
+            width: 46px;
+            height: 26px;
         }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
         .slider {
             position: absolute;
             cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #ccc;
+            background-color: #e0e0e0;
             transition: .4s;
             border-radius: 34px;
         }
         .slider:before {
             position: absolute;
             content: "";
-            height: 16px;
-            width: 16px;
+            height: 20px;
+            width: 20px;
             left: 3px;
             bottom: 3px;
             background-color: white;
             transition: .4s;
             border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         input:checked + .slider { background-color: var(--primary); }
-        input:checked + .slider:before { transform: translateX(18px); }
+        input:checked + .slider:before { transform: translateX(20px); }
 
-        /* Buttons Area */
-        .btn-wrapper {
-            margin-top: 20px;
-        }
-        .btn-top-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
+        /* Buttons */
+        .btn-wrapper { margin-top: 25px; }
+        
         .btn {
             border: none;
-            border-radius: 12px;
+            border-radius: 15px;
             font-family: 'Prompt';
             font-weight: 600;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
-            transition: 0.2s;
-            padding: 12px;
-            /* ป้องกันการเลือกข้อความบนปุ่ม */
+            gap: 8px;
+            transition: all 0.2s;
+            padding: 15px;
             user-select: none;
-            -webkit-user-select: none;
+            width: 100%;
         }
-        .btn:active { transform: scale(0.96); }
+        .btn:active { transform: scale(0.98); }
 
-        .btn-save {
-            background-color: var(--success);
-            color: white;
-            flex: 1;
-        }
-        .btn-clear {
-            background-color: #ffeaa7;
-            color: #d63031;
-            flex: 1;
-        }
         .btn-main {
             background: var(--primary);
             color: white;
-            width: 100%;
-            padding: 14px;
-            font-size: 16px;
-            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
+            margin-bottom: 15px;
         }
+        .btn-main:hover { background: var(--primary-dark); }
+
+        .action-row {
+            display: flex;
+            gap: 12px;
+        }
+        .btn-secondary {
+            background: #f1f2f6;
+            color: var(--text-gray);
+            font-size: 14px;
+            padding: 12px;
+        }
+        .btn-save { color: var(--success); background: rgba(0, 184, 148, 0.1); }
+        .btn-clear { color: var(--danger); background: rgba(255, 118, 117, 0.1); }
+
         .btn-share {
             margin-top: 15px;
-            background: var(--share-btn);
+            background: #2d3436;
             color: white;
-            width: 100%;
-            box-shadow: 0 4px 12px rgba(225, 112, 85, 0.3);
+            box-shadow: 0 8px 20px rgba(45, 52, 54, 0.2);
         }
 
-        /* Pay Slip Design */
+        /* Pay Slip Modern */
         .slip-modal {
             display: none;
             margin-top: 30px;
+            background: transparent;
+            animation: slideUp 0.5s ease;
+        }
+        .slip-paper {
             background: white;
             border-radius: 0;
             position: relative;
-            border-top: 5px solid var(--primary);
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
-            animation: slideUp 0.5s ease;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
         }
-        .slip-edge {
-            height: 10px;
-            background-image: radial-gradient(circle, transparent 50%, white 50%);
-            background-size: 10px 10px;
-            background-position: 0 100%;
-            margin-top: -5px;
-            position: relative;
-            z-index: 2;
+        /* ลายหยักใบเสร็จ */
+        .slip-top-edge {
+            height: 6px;
+            background: var(--primary);
         }
-        .slip-content {
-            padding: 20px;
-            border-bottom: 2px dashed #dfe6e9;
-            background: white; /* ต้องใส่เพื่อให้เวลาแคปรูปพื้นหลังไม่ดำ */
+        .slip-content { padding: 25px; }
+        
+        .slip-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px dashed #eee;
         }
+        .slip-header h3 { margin: 0; color: var(--dark); font-size: 18px; }
+        .slip-header span { font-size: 12px; color: #b2bec3; }
+
         .slip-row {
             display: flex;
             justify-content: space-between;
             font-size: 14px;
-            margin-bottom: 8px;
-            color: #636e72;
+            margin-bottom: 10px;
+            color: var(--text-gray);
         }
-        .slip-row.highlight { color: var(--dark); font-weight: 500; }
+        .slip-row.highlight { color: var(--dark); font-weight: 600; font-size: 15px;}
         .slip-row.income { color: var(--success); }
         .slip-row.deduct { color: var(--danger); }
         
-        .net-amount {
+        .total-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+            border: 1px solid #eee;
+        }
+        .total-section h1 { 
+            margin: 5px 0; 
+            font-size: 36px; 
+            color: var(--primary);
+            letter-spacing: -1px;
+        }
+        .total-section small { color: var(--text-gray); font-size: 13px; }
+
+        /* Footer Credit */
+        .dev-credit {
+            text-align: center;
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+        .dev-credit a {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 20px;
+            background: rgba(108, 92, 231, 0.1);
+            transition: all 0.3s;
+        }
+        .dev-credit a:hover {
             background: var(--primary);
             color: white;
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            margin-top: 15px;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(108, 92, 231, 0.3);
         }
-        .net-amount span { font-size: 12px; opacity: 0.8; display: block;}
-        .net-amount h1 { margin: 0; font-size: 32px; }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #2d3436;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 14px;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
 
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(45, 52, 54, 0.9);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 14px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-            z-index: 999;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            width: max-content;
-        }
-
-        /* ---- MOBILE OPTIMIZATION ---- */
+        /* Responsive Mobile */
         @media (max-width: 480px) {
-            body {
-                padding: 10px 5px; 
-            }
-
+            body { padding: 0; background: #f0f2f5; }
             .container {
-                padding: 20px 15px;
-                border-radius: 20px;
-                margin-bottom: 80px; 
+                max-width: 100%;
+                border-radius: 0;
+                box-shadow: none;
+                margin-bottom: 0;
+                min-height: 100vh;
+                padding-bottom: 80px; /* เผื่อพื้นที่ด้านล่าง */
             }
-
-            /* ปรับขนาดตัวอักษร input เป็น 16px เพื่อป้องกัน iOS Zoom */
-            input[type="number"] {
-                font-size: 16px; 
-                padding: 5px; /* แก้ไข: ลด padding ลงนิดหน่อยในมือถือให้มีพื้นที่ */
-            }
-
-            /* ปรับ Grid ของ OT ให้ชิดกันมากขึ้นบนจอมือถือ */
-            .ot-grid {
-                gap: 5px;
-                /* แก้ไข: เพิ่มขนาดคอลัมน์จาก 60px เป็น 70px เพื่อให้ไม่ซ้อน */
-                grid-template-columns: 1fr 70px 70px; 
-            }
-            .ot-inp {
-                width: 100% !important;
-            }
-
-            .header h2 {
-                font-size: 18px;
-            }
-
-            .btn {
-                padding: 14px; 
-            }
-
-            .toast {
-                top: auto;
-                bottom: 30px;
-            }
+            .header { margin-top: 10px; }
+            input[type="number"] { width: 100px; }
+            .ot-grid { grid-template-columns: 1fr 70px 70px; gap: 8px;}
         }
 
     </style>
@@ -346,27 +373,27 @@
 
 <div class="container">
     <div class="header">
-        <div class="icon-box"><i class="fas fa-wallet"></i></div>
+        <div class="header-icon"><i class="fas fa-wallet"></i></div>
         <h2>คำนวณเงินเดือน</h2>
-        <div class="icon-box" style="opacity:0;"></div> 
+        <p>Salary Calculator Pro</p>
     </div>
 
     <div class="card-section">
-        <div class="section-label"><i class="fas fa-money-bill-wave"></i> รายได้หลัก</div>
-        <div class="input-row">
+        <div class="section-label"><i class="fas fa-coins"></i> รายได้หลัก</div>
+        <div class="input-group input-row">
             <label>เงินเดือน</label>
             <input type="number" id="baseSalary" value="12800" inputmode="decimal">
         </div>
-        <div class="input-row">
-            <label>ค่าที่พัก + น้ำมัน</label>
+        <div class="input-group input-row">
+            <label>ค่าที่พัก/น้ำมัน</label>
             <input type="number" id="allowance" value="1500" inputmode="decimal">
         </div>
     </div>
 
     <div class="card-section">
-        <div class="section-label"><i class="fas fa-star"></i> เบี้ยขยัน (วันละ 125)</div>
+        <div class="section-label"><i class="fas fa-fire"></i> เบี้ยขยัน (วันละ 125)</div>
         <div class="input-row">
-            <label>จำนวนวันที่ได้</label>
+            <label>จำนวนวัน</label>
             <input type="number" id="diligenceDays" placeholder="0" inputmode="numeric">
         </div>
     </div>
@@ -376,54 +403,59 @@
         
         <div class="ot-grid">
             <label>เรท 100</label>
-            <div><input type="number" class="ot-inp" id="ot100h" placeholder="ชม." inputmode="numeric"></div>
-            <div><input type="number" class="ot-inp" id="ot100m" placeholder="น." inputmode="numeric"></div>
+            <input type="number" class="ot-inp" id="ot100h" value="0" inputmode="numeric">
+            <input type="number" class="ot-inp" id="ot100m" value="0" inputmode="numeric">
         </div>
         <div class="ot-grid">
             <label>เรท 120</label>
-            <div><input type="number" class="ot-inp" id="ot120h" placeholder="ชม." inputmode="numeric"></div>
-            <div><input type="number" class="ot-inp" id="ot120m" placeholder="น." inputmode="numeric"></div>
+            <input type="number" class="ot-inp" id="ot120h" value="0" inputmode="numeric">
+            <input type="number" class="ot-inp" id="ot120m" value="0" inputmode="numeric">
         </div>
         <div class="ot-grid">
             <label>เรท 150</label>
-            <div><input type="number" class="ot-inp" id="ot150h" placeholder="ชม." inputmode="numeric"></div>
-            <div><input type="number" class="ot-inp" id="ot150m" placeholder="น." inputmode="numeric"></div>
+            <input type="number" class="ot-inp" id="ot150h" value="0" inputmode="numeric">
+            <input type="number" class="ot-inp" id="ot150m" value="0" inputmode="numeric">
         </div>
     </div>
 
-    <div class="card-section" style="border-left: 3px solid var(--danger);">
+    <div class="card-section" style="border-left: 4px solid var(--danger);">
         <div class="section-label" style="color: var(--danger);"><i class="fas fa-minus-circle"></i> รายการหัก</div>
-        <div class="input-row">
-            <label>หักประกันสังคม (5%)</label>
+        <div class="input-group input-row">
+            <label>ประกันสังคม (5%)</label>
             <label class="toggle-switch">
                 <input type="checkbox" id="ssoCheck" checked>
                 <span class="slider"></span>
             </label>
         </div>
-        <div class="input-row" style="margin-top:10px;">
+        <div class="input-group input-row">
             <label>หักอื่นๆ (สาย/ลา)</label>
             <input type="number" id="otherDeduct" placeholder="0" style="color:var(--danger);" inputmode="decimal">
         </div>
     </div>
 
     <div class="btn-wrapper">
-        <div class="btn-top-row">
-            <button class="btn btn-save" onclick="manualSave()">
-                <i class="fas fa-save"></i> บันทึกค่า
-            </button>
-            <button class="btn btn-clear" onclick="clearData()">
-                <i class="fas fa-trash-alt"></i> ล้างค่า
-            </button>
-        </div>
         <button class="btn btn-main" onclick="calculate()">
             <i class="fas fa-calculator"></i> คำนวณ & สร้างสลิป
         </button>
+        
+        <div class="action-row">
+            <button class="btn btn-secondary btn-save" onclick="manualSave()">
+                <i class="fas fa-save"></i> บันทึกค่า
+            </button>
+            <button class="btn btn-secondary btn-clear" onclick="clearData()">
+                <i class="fas fa-trash-alt"></i> ล้างค่า
+            </button>
+        </div>
     </div>
 
     <div id="slipAreaWrapper" class="slip-modal">
-        <div id="slipCaptureTarget"> 
+        <div id="slipCaptureTarget" class="slip-paper"> 
+            <div class="slip-top-edge"></div>
             <div class="slip-content">
-                <div style="text-align:center; margin-bottom:15px; color:#b2bec3;">--- ใบสรุปเงินเดือน ---</div>
+                <div class="slip-header">
+                    <h3>ใบสรุปเงินเดือน</h3>
+                    <span>Monthly Salary Slip</span>
+                </div>
                 
                 <div class="slip-row highlight">
                     <span>เงินเดือนพื้นฐาน</span>
@@ -442,7 +474,7 @@
                     <span id="s_ot">0.00</span>
                 </div>
                 
-                <div style="border-bottom: 1px solid #eee; margin: 10px 0;"></div>
+                <div style="border-bottom: 1px dashed #eee; margin: 15px 0;"></div>
 
                 <div class="slip-row deduct">
                     <span>ประกันสังคม (SSO)</span>
@@ -453,21 +485,27 @@
                     <span id="s_deduct">-0.00</span>
                 </div>
 
-                <div class="net-amount">
-                    <span>ยอดเงินสุทธิที่ได้รับ</span>
+                <div class="total-section">
+                    <small>ยอดเงินสุทธิที่ได้รับ</small>
                     <h1 id="s_net">0.00</h1>
-                    <span>บาท</span>
+                    <small>บาท (THB)</small>
                 </div>
             </div>
-            <div class="slip-edge"></div>
+            <div style="height: 10px; background: radial-gradient(circle, transparent 50%, #ffffff 50%) 0 0/15px 15px repeat-x; transform: rotate(180deg); margin-top:-1px;"></div>
         </div>
 
-        <div style="padding: 0 20px 20px 20px;">
-            <button class="btn btn-share" onclick="shareSlip()">
-                <i class="fas fa-share-alt"></i> บันทึกรูป / แชร์สลิป
-            </button>
-        </div>
+        <button class="btn btn-share" onclick="shareSlip()">
+            <i class="fas fa-share-alt"></i> บันทึกรูป / แชร์สลิป
+        </button>
     </div>
+
+    <div class="dev-credit">
+        Developed by 
+        <a href="https://kimx-wed.vercel.app/" target="_blank">
+            <i class="fas fa-code"></i> kimx-wed
+        </a>
+    </div>
+
 </div>
 
 <div class="toast" id="toast"><i class="fas fa-check-circle"></i> บันทึกข้อมูลเรียบร้อย</div>
@@ -521,31 +559,35 @@
         document.getElementById('s_net').innerText = fmt(net);
 
         document.getElementById('slipAreaWrapper').style.display = 'block';
-        document.getElementById('slipAreaWrapper').scrollIntoView({behavior: 'smooth'});
+        
+        // Scroll ไปหาสลิปแบบนุ่มนวล
+        setTimeout(() => {
+            document.getElementById('slipAreaWrapper').scrollIntoView({behavior: 'smooth', block: 'start'});
+        }, 100);
 
         // บันทึกเงียบๆ
         saveData(false);
     }
 
-    // --- ฟังก์ชันแชร์รูปภาพ ---
     async function shareSlip() {
         const target = document.getElementById('slipCaptureTarget');
+        const btn = document.querySelector('.btn-share');
+        
+        // เปลี่ยนข้อความปุ่มระหว่างทำงาน
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังสร้างรูป...';
         
         try {
-            // แปลง div เป็น canvas
             const canvas = await html2canvas(target, {
-                scale: 2, // เพิ่มความคมชัด
+                scale: 3, // เพิ่มความชัด
                 backgroundColor: null,
-                useCORS: true // เผื่อกรณีมีรูปจากภายนอก
+                useCORS: true
             });
             
             const dataUrl = canvas.toDataURL("image/png");
-            
-            // แปลง DataURL เป็น Blob เพื่อใช้กับ Web Share API
             const blob = await (await fetch(dataUrl)).blob();
-            const file = new File([blob], "mysalary_slip.png", { type: "image/png" });
+            const file = new File([blob], "salary_slip.png", { type: "image/png" });
 
-            // ตรวจสอบว่า Browser รองรับการแชร์ไฟล์ไหม (Mobile ส่วนใหญ่รองรับ)
             if (navigator.share) {
                 try {
                     await navigator.share({
@@ -554,17 +596,17 @@
                         text: 'สรุปยอดเงินเดือนของฉัน'
                     });
                 } catch (error) {
-                    console.log('Error sharing:', error);
-                    // ถ้าแชร์ไม่ได้ หรือกดยกเลิก ก็ให้ดาวน์โหลดแทน
-                    downloadImage(dataUrl);
+                    // กรณี User กดยกเลิก Share ไม่ต้องทำอะไร
+                    if(error.name !== 'AbortError') downloadImage(dataUrl);
                 }
             } else {
-                // ถ้าเป็น PC ให้ดาวน์โหลดรูปเลย
                 downloadImage(dataUrl);
             }
         } catch (err) {
             alert('เกิดข้อผิดพลาดในการสร้างรูปภาพ');
             console.error(err);
+        } finally {
+            btn.innerHTML = originalText;
         }
     }
 
@@ -629,10 +671,10 @@
     function showToast(msg) {
         const t = document.getElementById('toast');
         if(msg) t.innerHTML = `<i class="fas fa-check-circle"></i> ${msg}`;
-        t.style.opacity = '1';
+        t.classList.add('show');
         setTimeout(() => {
-            t.style.opacity = '0';
-        }, 2000);
+            t.classList.remove('show');
+        }, 2500);
     }
 </script>
 
